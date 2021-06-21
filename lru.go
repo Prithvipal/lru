@@ -12,14 +12,12 @@ func NewLRU(capacity int) *lRU {
 
 func (lru *lRU) put(key, value string) {
 	if lru.l == nil {
-		nodeN := newNode(key, value)
-		lru.l.head = nodeN
-		lru.l.tail = nodeN
-		lru.bucket[key] = nodeN
+		l := newList(key, value)
+		lru.bucket[key] = l.head
 		return
 	}
 	data := lru.bucket[key]
-	if data != nil {
+	if data != nil && len(lru.bucket) > 1 {
 		lru.l.move(data)
 	} else {
 		lru.l.insert(data)
@@ -38,6 +36,8 @@ func (lru *lRU) get(key string) *string {
 	if val == nil {
 		return nil
 	}
-	lru.l.move(val)
+	if len(lru.bucket) > 1 {
+		lru.l.move(val)
+	}
 	return val.data.value
 }

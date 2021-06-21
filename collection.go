@@ -21,8 +21,26 @@ func newNode(key, value string) *node {
 	return &node{data: e}
 }
 
-func (dll list) insert(data *node) {}
+func newList(key, value string) *list {
+	nodeN := newNode(key, value)
+	return &list{head: nodeN, tail: nodeN}
+}
 
-func (dll list) move(nodeN *node) {}
+func (dll *list) insert(data *node) {
+	dll.tail.next = data
+	data.pre = dll.tail
+	dll.tail = dll.tail.next
+}
 
-func (dll list) removeFirst() {}
+func (dll *list) move(nodeN *node) {
+	nodeN.pre.next = nodeN.next
+	nodeN.next.pre = nodeN.pre
+	dll.tail.next = nodeN
+	nodeN.pre = dll.tail
+	dll.tail = nodeN
+}
+
+func (dll *list) removeFirst() {
+	dll.head = dll.head.next
+	dll.head.pre = nil
+}
