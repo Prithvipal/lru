@@ -63,8 +63,10 @@ func (dll *list) move(nodeN *node) {
 		nodeN.pre.next = nodeN.next
 		nodeN.next.pre = nodeN.pre
 		dll.tail.next = nodeN
+
 		nodeN.pre = dll.tail
 		dll.tail = nodeN
+		dll.tail.next = nil
 	}
 }
 

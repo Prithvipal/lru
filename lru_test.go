@@ -65,6 +65,16 @@ func TestPutFull(t *testing.T) {
 	assert.Equal(t, lruN.l.String(), "A=Apple,B=Ball,C=Cat,D=Dog,")
 }
 
+func TestPutHitMiddleEle(t *testing.T) {
+	lruN := NewLRU(5)
+	lruN.put("A", "Apple")
+	lruN.put("B", "Ball")
+	lruN.put("C", "Cat")
+	lruN.put("B", "BaLL")
+	assert.Len(t, lruN.bucket, 3)
+	assert.Equal(t, lruN.l.String(), "A=Apple,C=Cat,B=BaLL,")
+}
+
 func TestPutRemoveFirstRecentlyUsed(t *testing.T) {
 	lruN := NewLRU(4)
 	lruN.put("A", "Apple")
