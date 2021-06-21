@@ -21,9 +21,8 @@ func (lru *lRU) put(key, value string) {
 	if data != nil {
 		lru.l.moveWithValue(data, &value)
 	} else {
-
-		lru.l.insert(key, &value)
-		lru.bucket[key] = data
+		nodeN := lru.l.insert(key, &value)
+		lru.bucket[key] = nodeN
 		if len(lru.bucket) > lru.capacity {
 			lru.l.removeFirst()
 			delete(lru.bucket, key)

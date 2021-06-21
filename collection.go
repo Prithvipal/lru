@@ -28,11 +28,12 @@ func newList(key, value string) *list {
 	return &list{head: nodeN, tail: nodeN}
 }
 
-func (dll *list) insert(key string, value *string) {
+func (dll *list) insert(key string, value *string) *node {
 	nodeN := newNode(key, value)
 	dll.tail.next = nodeN
 	nodeN.pre = dll.tail
 	dll.tail = dll.tail.next
+	return nodeN
 }
 
 func (dll *list) String() string {
@@ -47,13 +48,20 @@ func (dll *list) String() string {
 
 func (dll *list) move(nodeN *node) {
 	if dll.head != dll.tail {
-		if nodeN.pre != nil {
-			nodeN.pre.next = nodeN.next
+		if nodeN == dll.tail {
+			return
 		}
-		if nodeN.next != nil {
-			nodeN.next.pre = nodeN.pre
+		if nodeN == dll.head {
+			dll.head = dll.head.next
+			dll.head.pre = nil
+			dll.tail.next = nodeN
+			dll.tail = dll.tail.next
+			dll.tail.next = nil
+			return
 		}
 
+		nodeN.pre.next = nodeN.next
+		nodeN.next.pre = nodeN.pre
 		dll.tail.next = nodeN
 		nodeN.pre = dll.tail
 		dll.tail = nodeN

@@ -37,14 +37,23 @@ func TestPutHalf(t *testing.T) {
 	assert.Equal(t, lruN.l.String(), "A=Apple,B=Ball,")
 }
 
-// func TestPutHitFirstEleWithTwoElements(t *testing.T) {
-// 	lruN := NewLRU(4)
-// 	lruN.put("A", "Apple")
-// 	lruN.put("B", "Ball")
-// 	lruN.put("A", "Apple")
-// 	assert.Len(t, lruN.bucket, 2)
-// 	assert.Equal(t, lruN.l.String(), "B=Ball,A=Apple,")
-// }
+func TestPutHitFirstEleWithTwoElements(t *testing.T) {
+	lruN := NewLRU(4)
+	lruN.put("A", "Apple")
+	lruN.put("B", "Ball")
+	lruN.put("A", "ApplE")
+	assert.Len(t, lruN.bucket, 2)
+	assert.Equal(t, lruN.l.String(), "B=Ball,A=ApplE,")
+}
+
+func TestPutHitLastEleWithTwoElements(t *testing.T) {
+	lruN := NewLRU(4)
+	lruN.put("A", "Apple")
+	lruN.put("B", "Ball")
+	lruN.put("B", "Ball")
+	assert.Len(t, lruN.bucket, 2)
+	assert.Equal(t, lruN.l.String(), "A=Apple,B=Ball,")
+}
 
 func TestPutFull(t *testing.T) {
 	lruN := NewLRU(4)
@@ -67,14 +76,14 @@ func TestPutRemoveFirstRecentlyUsed(t *testing.T) {
 	assert.Equal(t, lruN.l.String(), "B=Ball,C=Cat,D=Dog,E=Elephent,")
 }
 
-// func TestPutRemoveSecondRecentlyUsed(t *testing.T) {
-// 	lruN := NewLRU(4)
-// 	lruN.put("A", "Apple")
-// 	lruN.put("B", "Ball")
-// 	lruN.put("A", "Apple")
-// 	lruN.put("C", "Cat")
-// 	lruN.put("D", "Dog")
-// 	lruN.put("E", "Elephent")
-// 	assert.Len(t, lruN.bucket, 4)
-// 	assert.Equal(t, lruN.l.String(), "A=Apple,C=Cat,D=Dog,E=Elephent,")
-// }
+func TestPutRemoveSecondRecentlyUsed(t *testing.T) {
+	lruN := NewLRU(4)
+	lruN.put("A", "Apple")
+	lruN.put("B", "Ball")
+	lruN.put("A", "Apple")
+	lruN.put("C", "Cat")
+	lruN.put("D", "Dog")
+	lruN.put("E", "Elephent")
+	assert.Len(t, lruN.bucket, 4)
+	assert.Equal(t, lruN.l.String(), "A=Apple,C=Cat,D=Dog,E=Elephent,")
+}
