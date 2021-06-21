@@ -37,6 +37,15 @@ func TestPutHalf(t *testing.T) {
 	assert.Equal(t, lruN.l.String(), "A=Apple,B=Ball,")
 }
 
+// func TestPutHitFirstEleWithTwoElements(t *testing.T) {
+// 	lruN := NewLRU(4)
+// 	lruN.put("A", "Apple")
+// 	lruN.put("B", "Ball")
+// 	lruN.put("A", "Apple")
+// 	assert.Len(t, lruN.bucket, 2)
+// 	assert.Equal(t, lruN.l.String(), "B=Ball,A=Apple,")
+// }
+
 func TestPutFull(t *testing.T) {
 	lruN := NewLRU(4)
 	lruN.put("A", "Apple")
