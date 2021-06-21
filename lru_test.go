@@ -76,6 +76,17 @@ func TestPutRemoveFirstRecentlyUsed(t *testing.T) {
 	assert.Equal(t, lruN.l.String(), "B=Ball,C=Cat,D=Dog,E=Elephent,")
 }
 
+func TestPutHitLastElement(t *testing.T) {
+	lruN := NewLRU(4)
+	lruN.put("A", "Apple")
+	lruN.put("B", "Ball")
+	lruN.put("C", "Cat")
+	lruN.put("D", "Dog")
+	lruN.put("D", "DOG")
+	assert.Len(t, lruN.bucket, 4)
+	assert.Equal(t, lruN.l.String(), "A=Apple,B=Ball,C=Cat,D=DOG,")
+}
+
 func TestPutRemoveSecondRecentlyUsed(t *testing.T) {
 	lruN := NewLRU(4)
 	lruN.put("A", "Apple")
