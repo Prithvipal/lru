@@ -12,15 +12,18 @@ func NewLRU(capacity int) *lRU {
 
 func (lru *lRU) put(key, value string) {
 	if lru.l == nil {
-		l := newList(key, value)
-		lru.bucket[key] = l.head
+		lru.l = newList(key, value)
+		lru.bucket[key] = lru.l.head
 		return
 	}
 	data := lru.bucket[key]
-	if data != nil && len(lru.bucket) > 1 {
-		lru.l.move(data)
+
+	if data != nil {
+		lru.l.moveWithValue(data, &value)
 	} else {
-		lru.l.insert(data)
+
+		lru.l.insert(key, &value)
+		lru.bucket[key] = data
 		if len(lru.bucket) > lru.capacity {
 			lru.l.removeFirst()
 			delete(lru.bucket, key)
