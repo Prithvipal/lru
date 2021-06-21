@@ -108,3 +108,65 @@ func TestPutRemoveSecondRecentlyUsed(t *testing.T) {
 	assert.Len(t, lruN.bucket, 4)
 	assert.Equal(t, lruN.l.String(), "A=Apple,C=Cat,D=Dog,E=Elephent,")
 }
+
+func TestGetMissInEmpty(t *testing.T) {
+	lruN := NewLRU(5)
+	val := lruN.get("A")
+	assert.Nil(t, val)
+}
+
+func TestGetMissInOneSize(t *testing.T) {
+	lruN := NewLRU(5)
+	lruN.put("A", "Apple")
+	val := lruN.get("A")
+	assert.Equal(t, *val, "Apple")
+	assert.Equal(t, lruN.l.String(), "A=Apple,")
+}
+
+func TestGetHitFirstInPull(t *testing.T) {
+	lruN := NewLRU(5)
+	lruN.put("A", "Apple")
+	lruN.put("B", "Ball")
+	lruN.put("C", "Cat")
+	lruN.put("D", "Dog")
+	lruN.put("E", "Egg")
+	val := lruN.get("A")
+	assert.Equal(t, *val, "Apple")
+	assert.Equal(t, lruN.l.String(), "B=Ball,C=Cat,D=Dog,E=Egg,A=Apple,")
+}
+
+func TestGetHitLastInPull(t *testing.T) {
+	lruN := NewLRU(5)
+	lruN.put("A", "Apple")
+	lruN.put("B", "Ball")
+	lruN.put("C", "Cat")
+	lruN.put("D", "Dog")
+	lruN.put("E", "Egg")
+	val := lruN.get("E")
+	assert.Equal(t, *val, "Egg")
+	assert.Equal(t, lruN.l.String(), "A=Apple,B=Ball,C=Cat,D=Dog,E=Egg,")
+}
+
+func TestGetHitMiddelInPull(t *testing.T) {
+	lruN := NewLRU(5)
+	lruN.put("A", "Apple")
+	lruN.put("B", "Ball")
+	lruN.put("C", "Cat")
+	lruN.put("D", "Dog")
+	lruN.put("E", "Egg")
+	val := lruN.get("C")
+	assert.Equal(t, *val, "Cat")
+	assert.Equal(t, lruN.l.String(), "A=Apple,B=Ball,D=Dog,E=Egg,C=Cat,")
+}
+
+func TestGetMissInPull(t *testing.T) {
+	lruN := NewLRU(5)
+	lruN.put("A", "Apple")
+	lruN.put("B", "Ball")
+	lruN.put("C", "Cat")
+	lruN.put("D", "Dog")
+	lruN.put("E", "Egg")
+	val := lruN.get("F")
+	assert.Nil(t, val)
+	assert.Equal(t, lruN.l.String(), "A=Apple,B=Ball,C=Cat,D=Dog,E=Egg,")
+}

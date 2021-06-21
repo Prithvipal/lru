@@ -31,9 +31,6 @@ func (lru *lRU) put(key, value string) {
 }
 
 func (lru *lRU) get(key string) *string {
-	if lru == nil {
-		return nil
-	}
 	val := lru.bucket[key]
 	if val == nil {
 		return nil
