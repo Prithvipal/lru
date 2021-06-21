@@ -16,8 +16,13 @@ type list struct {
 	tail *node
 }
 
-func (dll list) insert(data int) {}
+func newNode(key, value string) *node {
+	e := entry{key: key, value: &value}
+	return &node{data: e}
+}
 
-func (dll list) move(data int) {}
+func (dll list) insert(data *node) {}
 
-func (dll list) remove(data int) {}
+func (dll list) move(nodeN *node) {}
+
+func (dll list) removeFirst() {}
